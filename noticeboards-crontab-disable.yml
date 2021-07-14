@@ -1,0 +1,30 @@
+---
+- hosts: library
+  become: true
+  become_user: root
+  tasks:
+    - name: Restart noticeboard every day at 03.05 UTC
+      cron:
+        name: "system_restart"
+        user: "root"
+        hour: 3
+        minute: 5
+        job: "/sbin/shutdown -r"
+        state: absent
+
+    - name: Restart display manager every hour
+      cron:
+        name: "display_manager_restart"
+        user: "root"
+        special_time: hourly
+        job: "/bin/systemctl restart display-manager"
+        state: absent
+
+    - name: Restart VNC server every hour
+      cron:
+        name: "vnc_server_restart"
+        user: "root"
+        special_time: hourly
+        job: "/bin/systemctl restart x11vnc"
+        state: absent
+
